@@ -1,0 +1,17 @@
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        Map<String,List<String>> map=new HashMap<>();
+        for(String str:strs){
+            char[] chars=str.toCharArray();//char[]数组才能排序，字符串不行
+            Arrays.sort(chars);
+            String key=new String(chars);
+            if(!map.containsKey(key)){
+                map.put(key,new ArrayList<>());
+            }
+            map.get(key).add(str);
+        }
+        return new ArrayList<>(map.values());//map.values() 返回的是 Collection<List<String>>，用 new ArrayList<>() 包装后就变成了 List<List<String>>
+    }
+}
+//靠AI辅助理解做出来的，空字符串也考虑进去了
+//使用排序解法做的，另一种解法是计数
