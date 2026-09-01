@@ -1,0 +1,46 @@
+class Solution {
+    public int longestConsecutive(int[] nums) {
+        Map<Integer,Integer>maps=new HashMap<>();
+        int a=1,b=0;
+        for(int num:nums){
+            maps.put(a,num);
+            a+=1;
+        }
+        for(Integer value:maps.values()){
+            if(maps.containsValue(value-1)){
+                continue;
+            }
+            int y=value+1;
+            while(maps.containsValue(y)){
+                y++;
+            }
+            b=Math.max(b,y-value);//想着使用数组来保存b，但是不能补全代码
+        }
+        return b;
+    }
+}//超出时限了，原因是containsValue查找是O(n),而不是O(1)，所以需要使用Set<>
+
+class Solution {
+    public int longestConsecutive(int[] nums) {
+        Set<Integer> st = new HashSet<>();
+        for (int num : nums) {
+            st.add(num); // 把 nums 转成哈希集合
+        }
+
+        int ans = 0;
+        for (int x : st) { // 遍历哈希集合
+            if (st.contains(x - 1)) { // 如果 x 不是序列的起点，直接跳过
+                continue;
+            }
+            // x 是序列的起点
+            int y = x + 1;
+            while (st.contains(y)) { // 不断查找下一个数是否在哈希集合中
+                y++;
+            }
+            // 循环结束后，y-1 是最后一个在哈希集合中的数
+            ans = Math.max(ans, y - x); // 从 x 到 y-1 一共 y-x 个数
+        }
+        return ans;
+    }
+}
+//标准答案
