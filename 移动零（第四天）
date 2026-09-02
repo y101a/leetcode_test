@@ -1,0 +1,43 @@
+class Solution {
+    public void moveZeroes(int[] nums) {
+        if(nums.length<=1){
+            return;
+        }
+        int a=0,b=1;
+        while(a!=b){
+            if(nums[a]==0&&nums[b]!=0){
+                int c=nums[a];
+                nums[a]=nums[b];
+                nums[b]=c;
+            }
+            if(nums[a]==0&&nums[b]==0&&b!=nums.length-1){
+                b++;
+                continue;
+            }
+            if(a!=nums.length-1){
+                a++;
+                if(b!=nums.length-1){
+                    b++;
+                }
+            }
+        }
+    }
+}//使用双指针要注意边界条件的判断，此代码的条件判断太多可能有多余代码，还需优化
+//只要求在数组上修改代码，不用返回数组
+
+class Solution {
+    public void moveZeroes(int[] nums) {
+        int slow = 0, fast = 0;
+        while(fast < nums.length){
+            if(nums[fast] != 0){
+                nums[slow] = nums[fast];
+                slow ++;
+            }
+            fast ++;
+        }
+        while(slow < nums.length){
+            nums[slow] = 0;
+            slow++;
+        }
+    }
+}//标准答案
