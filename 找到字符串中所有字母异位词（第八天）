@@ -1,0 +1,58 @@
+class Solution {
+    public List<Integer> findAnagrams(String s, String p) {
+        List<Integer> res=new ArrayList<>();
+        int m=s.length(),n=p.length();
+        if(m<n) return res;
+        int[] arr=new int[26];//很好的想法，用数组来记录p中各个字母出现的次数
+        for(char pchar:p.toCharArray()){
+            arr[pchar-'a']++;//用pchar-'a'就能算出不同字母对应的数组下标
+        }
+        int[] win=new int[26];
+        for(int i=0;i<n;i++){
+            win[s.charAt(i)-'a']++;
+        }
+        if(Arrays.equals(arr,win)) res.add(0);//第一次记录窗口长度和后面窗口移动不同，不能合并
+        for(int i=n;i<m;i++){
+            win[s.charAt(i)-'a']++;
+            win[s.charAt(i-n)-'a']--;
+            if(Arrays.equals(arr,win)){
+                res.add(i-n+1);
+            }
+        }
+        return res;
+    }
+}//使用双数组加滑动窗口来解决,参考ai给出的提示完成
+
+class Solution {
+    public List<Integer> findAnagrams(String s, String p) {
+        int sLen = s.length(), pLen = p.length();
+
+        if (sLen < pLen) {
+            return new ArrayList<Integer>();
+        }
+
+        List<Integer> ans = new ArrayList<Integer>();
+        int[] sCount = new int[26];
+        int[] pCount = new int[26];
+        for (int i = 0; i < pLen; ++i) {
+            ++sCount[s.charAt(i) - 'a'];
+            ++pCount[p.charAt(i) - 'a'];
+        }
+
+        if (Arrays.equals(sCount, pCount)) {
+            ans.add(0);
+        }
+
+        for (int i = 0; i < sLen - pLen; ++i) {
+            --sCount[s.charAt(i) - 'a'];
+            ++sCount[s.charAt(i + pLen) - 'a'];
+
+            if (Arrays.equals(sCount, pCount)) {
+                ans.add(i + 1);
+            }
+        }
+
+        return ans;
+    }
+}
+//标准答案
