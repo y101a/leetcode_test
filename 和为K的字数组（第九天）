@@ -1,0 +1,16 @@
+class Solution {
+    public int subarraySum(int[] nums, int k) {
+        Map<Integer, Integer> cnt = new HashMap<>(nums.length, 1); // 预分配空间
+        int s = 0;
+        int ans = 0;
+        for (int x : nums) {
+            cnt.merge(s, 1, Integer::sum); // cnt[s]++
+            s += x;
+            ans += cnt.getOrDefault(s - k, 0);
+        }
+        return ans;
+    }
+}
+//标准答案，使用前缀和加哈希表解决
+//暴力计算->用数组记录前缀和->移项寻找规律->使用哈希表
+//不能使用滑动窗口，应为测试用例中有负数，导致边界不确定
