@@ -1,0 +1,20 @@
+class Solution {
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        Deque<Integer> deque=new LinkedList<>();//双端队列使用方法
+        int[] res=new int[nums.length-k+1];
+        for(int j=0,i=1-k;j<nums.length;i++,j++){
+            if(i>0&&deque.peekFirst()==nums[i-1]){
+                deque.removeFirst();//peekFirst是队首元素
+            }
+            while(!deque.isEmpty()&&deque.peekLast()<nums[j]){
+                deque.removeLast();//移除队尾
+            }
+            deque.addLast(nums[j]);
+            if(i>=0){
+                res[i]=deque.peekFirst();
+            }
+        }
+        return res; 
+    }
+}
+//最开始想到的解决方法是暴力递归，但是耗时超出限制了
