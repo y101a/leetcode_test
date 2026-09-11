@@ -1,0 +1,100 @@
+class Solution {
+    Map<Character,Integer> tmap=new HashMap<>();
+    Map<Character,Integer> smap=new HashMap<>();
+    public String minWindow(String s, String t) {
+        int tlen=t.length();
+        for(int i=0;i<tlen;i++){
+            char c=t.charAt(i);
+            tmap.put(t.charAt(i),tmap.getOrDefault(c,0)+1);
+        }
+        int l=0,r=-1;
+        int len=Integer.MAX_VALUE,ansL=-1,ansR=-1;
+        int slen=s.length();
+        while(r<slen){
+            ++r;
+            if(r<slen&&tmap.containsKey(s.charAt(r))){
+                smap.put(s.charAt(r),smap.getOrDefault(s.charAt(r),0)+1);
+            }//右边界不断右移直到窗口中完全包含t
+            while(check()&&l<=r){
+                if(r-l+1<len){
+                    len=r-l+1;
+                    ansL=l;
+                    ansR=l+len;
+                }//窗口长度r-l+1
+                if(tmap.containsKey(s.charAt(l))){
+                    smap.put(s.charAt(l),smap.getOrDefault(s.charAt(l),0)-1);
+                }
+                ++l;
+            }//左边界开始收缩，直到窗口最小
+        }
+        return ansL==-1?"":s.substring(ansL,ansR);//ansL如果是-1说明窗口根本没动，则返回空
+    }
+    public boolean check(){
+        Iterator iter=tmap.entrySet().iterator();//创建tmap迭代器，用来逐个取出里面的键值对
+        while(iter.hasNext()){//遍历所有字符
+            Map.Entry entry=(Map.Entry) iter.next();//取出一个键值对
+            Character key=(Character) entry.getKey();//分理出key
+            Integer val=(Integer) entry.getValue();//分离出value
+            if(smap.getOrDefault(key,0)<val){
+                return false;
+            }//如果窗口内的key小于需要值返回false
+        }
+        return true;
+    }
+}
+//代码实现很复杂，自己几乎写不出来，看懂教程后用时竟然也是最长的
+
+
+class Solution {
+    public static String minWindow(String s, String t) {
+        if (s == null || t == null || s.length() < t.length()) {
+            return "";
+        }
+        
+        int[] need = new int[128];    // 记录t中每个字符的需求数量，数组大小128因为t大小写都有可能
+        int[] window = new int[128];  // 记录当前窗口中每个字符的数量
+        for (char c : t.toCharArray()) {
+            need[c]++;
+        }
+        
+        int needCount = 0; // t中不同字符的种类数
+        for (int num : need) {
+            if (num > 0) {
+                needCount++;
+            }
+        }
+        
+        int left = 0, right = 0;
+        int count = 0; // 当前窗口中已满足需求的字符种类数
+        int minLen = Integer.MAX_VALUE;
+        int minLeft = 0;
+        
+        while (right < s.length()) {
+            char c = s.charAt(right);
+            window[c]++;
+            // 若某字符恰好满足需求，则已满足种类数+1
+            if (need[c] > 0 && window[c] == need[c]) {
+                count++;
+            }
+            
+            // 窗口已覆盖t，开始收缩左边界
+            while (count == needCount) {
+                if (right - left + 1 < minLen) {
+                    minLen = right - left + 1;
+                    minLeft = left;
+                }
+                char d = s.charAt(left);
+                // 移除左边界字符后，若该字符不再满足需求，则已满足种类数-1
+                if (need[d] > 0 && window[d] == need[d]) {
+                    count--;
+                }
+                window[d]--;
+                left++;
+            }
+            right++;
+        }
+        
+        return minLen == Integer.MAX_VALUE ? "" : s.substring(minLeft, minLeft + minLen);
+    }
+}
+//使用数组竟然比哈希表快这么多，逻辑基本是一样的
