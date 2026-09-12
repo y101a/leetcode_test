@@ -1,0 +1,34 @@
+class Solution {
+    public int maxSubArray(int[] nums) {
+        int len=nums.length+1;
+        int[] frontadd=new int[len];
+        frontadd[0]=0;//前缀和数组第一个值是0,比原数组空间大一
+        for(int i=0;i<len-1;i++){
+            frontadd[i+1]=frontadd[i]+nums[i];
+        }
+        int max=Integer.MIN_VALUE,min=0;
+        for(int j=1;j<len;j++){
+            max=Math.max(max,frontadd[j]-min);
+            min=Math.min(min,frontadd[j]);
+        }//这里直接比较大小就能找到前缀和数组中最大值与最小值的差
+        return max;//在for循环中已经frontadd[j]-min,所以不需要再-min了直接返回max
+    }
+}
+//使用前缀和完成，思路自己想到的，但是实现过程还是不熟练，而且逻辑有错误，靠ai修改
+
+class Solution {
+    public int maxSubArray(int[] nums) {
+        int resultMax = nums[0];
+        int curMax = 0;
+        for(int i = 0; i<nums.length;i++){
+            if(curMax<0){
+                curMax = 0;
+            }
+            curMax = curMax+nums[i];
+            resultMax = Math.max(curMax,resultMax);
+            
+        }
+        return resultMax;
+    }
+}
+//标准答案
