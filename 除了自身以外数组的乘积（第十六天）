@@ -1,0 +1,18 @@
+class Solution {
+    public int[] productExceptSelf(int[] nums) {
+        int len=nums.length;
+        int[] res=new int[len];
+        res[0]=1;
+        int temp=1;
+        for(int i=1;i<len;i++){
+            res[i]=res[i-1]*nums[i-1];
+        }//计算上半区
+        for(int i=len-2;i>=0;i--){
+            temp*=nums[i+1];//数组最后一个数不用变因为在上一个循环中只有这个数是正确的
+            res[i]*=temp;
+        }
+        return res;
+    }
+}
+//思路很好想，但是难点在于题目要求不能除且时间小于O(n)，导致没有做题思路了
+//将数组分为上下两个三角，分别计算上下半区
