@@ -1,0 +1,23 @@
+class Solution {
+    public int firstMissingPositive(int[] nums) {
+        int len=nums.length;
+        for(int i=0;i<len;i++){
+            while(nums[i]>0&&nums[i]<=len&&nums[nums[i]-1]!=nums[i]){
+                swap(nums,nums[i]-1,i);
+            }//要大于零的小于数组长度的，座不对位的
+        }
+        for(int i=0;i<len;i++){
+            if(nums[i]!=i+1){
+                return i+1;
+            }
+        }//第二次遍历数组找到没出现的最小正整数
+        return len+1;//都出现了那就返回len+1
+    }
+    public void swap(int[] nums,int i,int j){
+        int temp=nums[i];
+        nums[i]=nums[j];
+        nums[j]=temp;
+    }
+}
+//第一次做直接找到数组最大值，返回最大值+1了，后来发现正数不一定是连续的
+//换座位是将数组直接看做一个哈希表，要返回最小值，那么返回区间一定在[i,n+1]中，然后让数组中小于n的数都做到对应位置上，两次循环就能找到缺少了谁,n是数组长度
