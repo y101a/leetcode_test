@@ -1,0 +1,30 @@
+class Solution {
+    public void setZeroes(int[][] matrix) {
+        int m=matrix.length;
+        int n=matrix[0].length;
+        int[] row=new int[m];
+        int[] col=new int[n];//行和列的值容易写反
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(matrix[i][j]==0){
+                    row[i]=1;
+                    col[j]=1;
+                }
+            }
+        }
+        for(int i=0;i<m;i++){
+            if(row[i]==1){
+                Arrays.fill(matrix[i],0);//二维数组让某一行变成一个数的方法
+            }
+        }
+        for(int j=0;j<n;j++){
+            if(col[j]==1){
+                for(int i=0;i<m;i++){
+                    matrix[i][j]=0;//二维数组不能直接让某一列变成同一个数，需要暴力遍历
+                }
+            }
+        }
+    }
+}
+//想到的暴力解法是遍历数组记录里面是零的位置，然后根据位置把行和列都置零，但是这样占用空间较大
+//实际只需要分别标记行和列的第一项，只要应该置零其他位置就跟着一起置零了
