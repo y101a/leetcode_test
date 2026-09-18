@@ -1,0 +1,35 @@
+class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> res=new ArrayList<>();
+        int left=0,right=matrix[0].length-1;//防止数组越界
+        int up=0,down=matrix.length-1;
+        while(up<=down&&left<=right){
+            //从左到右
+            for(int j=left;j<=right;j++){
+                res.add(matrix[up][j]);
+            }
+            up++;
+            //从上到下
+            for(int i=up;i<=down;i++){
+                res.add(matrix[i][right]);
+            }
+            right--;
+            //从右到左
+            if(up<=down){
+                for(int j=right;j>=left;j--){
+                    res.add(matrix[down][j]);
+                }
+                down--;
+            }//← 和 ↑ 的循环条件只检查了列/行的一维，另一维（行/列）可能已经坍塌，必须手动用 if 拦住，否则会把已经走过的行/列再走一遍。
+            //从下到上
+            if(left<=right){
+                for(int i=down;i>=up;i--){
+                    res.add(matrix[i][left]);
+                }
+                left++;
+            }
+        }
+        return res;
+    }
+}
+//本题难点在于如何准确判断边界条件的收缩代码逻辑
