@@ -1,0 +1,22 @@
+class Solution {
+    public void rotate(int[][] matrix) {
+        int m=matrix.length;
+        int n=matrix[0].length;//m一定等于n,无实际区别
+        for(int i=0;i<m;i++){
+            for(int j=i+1;j<n;j++){
+                int tmp=matrix[i][j];
+                matrix[i][j]=matrix[j][i];
+                matrix[j][i]=tmp;
+            }
+        }
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n/2;j++){
+                int tmp=matrix[i][j];
+                matrix[i][j]=matrix[i][n-j-1];//注意是n-j-1而不是n-i-1
+                matrix[i][n-j-1]=tmp;
+            }
+        }
+    }
+}
+//最初想法是在找一个矩阵记录答案后重新填写回原矩阵但是偏离题意
+//难点1是如何保存原矩阵数据：可以使用交换而不是覆盖来保存数据，难点2是交换的规则是怎样的：采用两步方法1是矩阵转置（逆时针旋转九十度）2是换行（将第一行与最后一行交换...）
