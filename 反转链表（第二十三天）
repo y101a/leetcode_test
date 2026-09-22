@@ -1,0 +1,25 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        ListNode pre=null;
+        ListNode cur=head;
+        while(cur!=null){
+            ListNode next=cur.next;
+            cur.next=pre;
+            pre=cur;
+            cur=next;
+        } 
+        return pre;
+    }
+}
+//代码逻辑和实现都非常简单，对于第一次学习链表结构的人能起到非常好的练习作用
+//太久没练习链表导致除了暴力解决没想到用三个指针交替进行，还是经验太少了
