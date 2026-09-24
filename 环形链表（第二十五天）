@@ -1,0 +1,43 @@
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public boolean hasCycle(ListNode head) {
+        Set<ListNode> set=new HashSet<>();
+        ListNode pa=head;
+        while(pa!=null){
+            if(set.contains(pa)){
+                return true;
+            }
+            set.add(pa);
+            pa=pa.next;
+        }
+        return false;
+    }
+}
+//暴力阶梯就是定义一个哈希表，然后遍历链表判断节点是否在哈希表中出现，如果出现解释循环链表
+//其实我觉得这个暴力解题时间复杂度不算高只有o(n),空间复杂度为O(n)
+
+public class Solution {
+    public boolean hasCycle(ListNode head) {
+        ListNode fast=head,slow=head;
+        while(fast!=null&&fast.next!=null){//没环的判断条件就是快指针遇到空
+            fast=fast.next.next;
+            slow=slow.next;
+            if(fast==slow){
+                return true;
+            }
+        }
+        return false;
+    }
+}
+//标准答案
+//左程云讲过使用快慢指针可以判断一个链表是否有环
