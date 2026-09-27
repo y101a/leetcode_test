@@ -1,0 +1,35 @@
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public ListNode detectCycle(ListNode head) {
+        if(head==null||head.next==null||head.next.next==null){
+            return null;
+        }//慢指针和快指针要走的位置不能为空，否则报错
+        ListNode slow=head.next;
+        ListNode fast=head.next.next;
+        while(slow!=fast){
+            if(fast.next==null||fast.next.next==null){
+                return null;
+            }//检查如果链表不是环形的返回空
+            slow=slow.next;
+            fast=fast.next.next;
+        }//让慢指针指向链表的中间节点，再让快指针指回链表的头结点
+        fast=head;
+        while(slow!=fast)
+        {
+            fast=fast.next;
+            slow=slow.next;
+        }//快慢指针同时移动，当快慢指针相遇时就是链表环的入口
+        return fast;
+    }
+}
+//本题采用了弗洛伊德判圈算法，是很久之前按照左程云的课输入的代码，本次没有重写再写一遍
