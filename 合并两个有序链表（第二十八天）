@@ -1,0 +1,45 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+         PriorityQueue<ListNode> heap=new PriorityQueue<>((a,b)->a.val-b.val);//小根堆会将存入的数进行排序，将最小元素置于队首
+         if(list1!=null)
+         {
+            heap.add(list1);
+         }
+         if(list2!=null)
+         {
+            heap.add(list2);
+         }
+         if(heap.isEmpty())
+         {
+            return null;
+         }//三连判检验链表是否需要继续检查
+         ListNode h=heap.poll();
+         ListNode pre=h;
+         if(pre.next!=null)
+         {
+            heap.add(pre.next);
+         }//把两个链表中小的节点的后一个节点加入小根堆，为后续最小节点出队列做准备
+         while(!heap.isEmpty())
+         {
+            ListNode cur=heap.poll();
+            pre.next=cur;
+            pre=cur;
+            if(pre.next!=null)
+            {
+                heap.add(pre.next);
+            }
+         }//给变链表指向的位置，注意不能丢失后续节点
+         return h;
+    }
+}
+//依旧古早学习资料，抄左程云代码，目前是看懂了并不代表下次遇到一定会写的很顺利
