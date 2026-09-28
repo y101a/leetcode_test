@@ -1,0 +1,34 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode head=new ListNode(0);//先创建链表头构建链表
+        ListNode l3=head;//l3负责指向下一个节点的位置
+        int carry=0;//进位
+        while(l1!=null||l2!=null||carry>0){
+            int sum=carry;
+            if(l1!=null){
+                sum+=l1.val;
+                l1=l1.next;
+            }
+            if(l2!=null){
+                sum+=l2.val;
+                l2=l2.next;
+            }
+            l3.next=new ListNode(sum%10);
+            l3=l3.next;
+            carry=sum/10;//注意是sum/10否则carry不会变
+        }
+        return head.next;
+    }
+}
+//第一次写打算将链表转为数字用数字相加后在转为链表，但是链表的长度可能达到100为，也就是说无法存入这么大数，而且这样做耗时也一定很长
+//第二次做分别计算链表的每一位，额外记录进位的值，这样就可以实现两数相加，而且耗时短，题目中链表的值与实际相反正好表示从各位开始相加
