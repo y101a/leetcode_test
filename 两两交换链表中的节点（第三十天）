@@ -1,0 +1,26 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode swapPairs(ListNode head) {
+        ListNode dummy=new ListNode(0,head);
+        ListNode pre=dummy;//dummy用来做返回定位，pre作为链表指向的辅助节点
+        while(pre.next!=null&&pre.next.next!=null){
+            ListNode pa=pre.next;
+            ListNode pb=pa.next;
+            pre.next=pb;
+            pa.next=pb.next;
+            pb.next=pa;
+            pre=pa;
+        }
+        return dummy.next;
+    }
+}
+//思路没有问题就是遍历链表然后交换两个链表，问题在于可能出现哑节点，或者链表断开的情况
