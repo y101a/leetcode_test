@@ -1,0 +1,46 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode p=head;
+        List<ListNode> arr=new ArrayList<>();//用数组保存必须要数组的长度，可能重复遍历链表，所以选择哈希表存储
+        while(p!=null){
+            arr.add(p);//哈希表存储必须通过.add方式添加
+            p=p.next;
+        }
+        int size=arr.size();
+        int k=size-n;
+        if(k==0){
+            return head.next;
+        }//要特别考虑边界情况
+        ListNode l1=arr.get(size-n-1);//取要删除节点的上一个节点
+        l1.next=l1.next.next;
+        return head;
+    }
+}
+//本来的想法是记录每一个节点，在通过n来定位要删除的节点，时间复杂度为O(n),空间复杂度为O（n）,虽然用时很小但还有优化空间
+
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode dummy=new ListNode(0,head);//定义一个假头节点作为哨兵
+        ListNode fast=dummy,slow=dummy;
+        for(int i=0;i<n;i++){
+            fast=fast.next;
+        }//先让快指针走n个节点
+        while(fast.next!=null){//注意是快指针的next指向空
+            fast=fast.next;
+            slow=slow.next;
+        }//之后让快慢指针同时走直到快指针走到最后，那么慢指针所在位置就是要删除节点的前一个
+        slow.next=slow.next.next;
+        return dummy.next;//注意不能直接返回head，因为如果删除头结点返回head就错误了
+    }
+}
+//标准答案，哨兵加快慢指针能将空间复杂度降为O(1)
