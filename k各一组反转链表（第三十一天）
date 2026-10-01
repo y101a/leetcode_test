@@ -1,0 +1,70 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode reverseKGroup(ListNode head, int k) {
+        ListNode dummy=new ListNode(0,head);
+        ListNode pre=dummy;
+        ListNode cur=head;
+        while(true){
+            ListNode test=cur;
+            for(int i=0;i<k;i++){
+                if(test==null){
+                    return dummy.next;
+                }
+                test=test.next;
+            }//检验剩下的节点数是否够一组
+
+            ListNode groupPre=null;
+            ListNode groupCur=cur;
+            for(int i=0;i<k;i++){
+                ListNode next=groupCur.next;
+                groupCur.next=groupPre;
+                groupPre=groupCur;
+                groupCur=next;
+            }//交换每一组内节点的方向
+
+            pre.next=groupPre;// 上一组的尾连到反转后的头
+            cur.next=groupCur;// 反转前的头(现在是尾)连到下一组
+            pre=cur;// pre移到这组的尾
+            cur=groupCur;// cur移到下一组的头
+            //连接每一组
+        }
+    }
+}
+//最早的迭代法想法是把整个链表按k分组，然后分别利用反转链表的方法反转组内节点最后再将每一组连接，难点是连接组间的代码和判断剩下的是否够一组
+//还可以利用递归解决，但是空间复杂度比迭代法稍长
+
+class Solution {
+    public ListNode reverseKGroup(ListNode head, int k) {
+        ListNode cur = head;
+        int count = 0;
+        // 检查够不够k个
+        while (cur != null && count < k) {
+            cur = cur.next;
+            count++;
+        }
+        // 不够k个，直接返回原头
+        if (count < k) return head;
+
+        // 够k个，反转前k个
+        ListNode pre = null;
+        cur = head;
+        for (int i = 0; i < k; i++) {
+            ListNode next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+        }
+        // 递归反转后面的，把当前组的尾(head)连到后面的结果
+        head.next = reverseKGroup(cur, k);
+        return pre;
+    }
+}
