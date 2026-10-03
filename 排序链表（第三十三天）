@@ -1,0 +1,62 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode sortList(ListNode head) {
+        List<Integer> list=new ArrayList<>();
+        ListNode cur=head;
+        while(cur!=null){
+            list.add(cur.val);
+            cur=cur.next;
+        }
+        Collections.sort(list);
+        cur=head;
+        for(int i=0;i<list.size();i++){
+            cur.val=list.get(i);
+            cur=cur.next;
+        }
+        return head;
+    }
+}
+//取巧了，因为本体并没有要求不能更改节点内的值，所以遍历链表取出链表中的值再排序后放回原来的链表可以完成题目
+//这样做的时间复杂度是O(n)，空间复杂度是O(n),可能会被面试官追问是否有通过修改节点指向的方式完成代码
+
+class Solution {
+    public ListNode sortList(ListNode head) {
+        if(head==null||head.next==null){
+            return head;
+        }
+        ListNode slow=head,fast=head.next;
+        while(fast!=null&&fast.next!=null){
+            fast=fast.next.next;
+            slow=slow.next;
+        }//先利用快慢指针找到中间节点mid
+        ListNode mid=slow.next;
+        slow.next=null;
+        ListNode left=sortList(head);
+        ListNode right=sortList(mid);//通过递归不断找到要比较的左右节点
+        ListNode dummy=new ListNode(0);//定义哨兵方便返回结果头结点
+        ListNode cur=dummy;
+        while(left!=null&&right!=null){//当left和right中有一个为空就退出循环
+            if(left.val<right.val){
+                cur.next=left;
+                left=left.next;
+            }
+            else{
+                cur.next=right;
+                right=right.next;
+            }//在每一层中都比较left和right的大小，谁小就让cur指向谁
+            cur=cur.next;
+        }
+        cur.next=left!=null?left:right;//把剩下的链接在cur的后面
+        return dummy.next;
+    }
+}
+//归并排序加递归解决
