@@ -1,0 +1,76 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode mergeKLists(ListNode[] lists) {
+        if(lists==null||lists.length==0){
+            return null;
+        } //没有值应该返回空
+        PriorityQueue<ListNode> queue=new PriorityQueue<>((a,b)->a.val-b.val);//注意小根堆的定义是PriorityQueue
+        for(ListNode head:lists){
+            if(head!=null){
+                queue.offer(head);
+            }
+        }
+        ListNode dummy=new ListNode(0);
+        ListNode cur=dummy;
+        while(!queue.isEmpty()){//判断队列是否为空应该用isEmpty()
+            ListNode next=queue.poll();
+            cur.next=next;
+            cur=cur.next;
+            if(next.next!=null){
+                queue.offer(next.next); 
+            }
+        }
+        return dummy.next;
+    }
+}
+//先设计一个小根堆，将数组中的头结点都放进小根堆中然后取出小根堆的队首，再将队首的下一个节点加入小根堆中直到将队列中的值全部取出
+
+class Solution {
+    public ListNode mergeKLists(ListNode[] lists) {
+        if (lists == null || lists.length == 0) return null;
+        return mergeRange(lists, 0, lists.length-1);
+    }
+
+    public ListNode mergeRange(ListNode[] lists, int left, int right) {
+        if (left == right) return lists[left];
+        int mid = left + (right-left)/2;
+        ListNode l1 = mergeRange(lists, left, mid);
+        ListNode l2 = mergeRange(lists, mid+1, right);
+        return mergeTwoLists(l1, l2);
+    }
+
+
+    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        ListNode dummyHead = new ListNode(-1);
+
+        ListNode cur = dummyHead;
+        while(list1 != null && list2 != null) {
+            if (list1.val < list2.val) {
+                // cur.next = new ListNode(list1.val);
+                cur.next = list1;
+                list1 = list1.next;
+            } else {
+                // cur.next = new ListNode(list2.val);
+                cur.next = list2;
+                list2 = list2.next;
+            }
+            cur = cur.next;
+        }
+        // if (list1 == null) cur.next = list2;
+        // if (list2 == null) cur.next = list1;
+        cur.next = (list1 != null) ? list1 : list2;
+
+        return dummyHead.next;
+    }
+}
+//标准答案，时间复杂度相同比我想的快是因为常数项比我少
+//采用归并排序和递归，把k个链表两两合并
