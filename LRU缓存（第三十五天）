@@ -1,0 +1,108 @@
+class LRUCache {
+    class DoubleNode{
+        public int key;
+        public int val;
+        public DoubleNode last;
+        public DoubleNode next;
+        public DoubleNode(int k,int v){
+            this.key=k;
+            this.val=v;
+        }
+    }//必须采用双向链表，方便节点的移动
+    class DoubleList{
+        public DoubleNode head;
+        public DoubleNode tail;
+        public DoubleList(){
+            head=null;
+            tail=null;
+        }
+        public void addNode(DoubleNode newNode){
+            if(newNode==null){
+                return;
+            }
+            if(head==null){
+                head=newNode;
+                tail=newNode;
+            }
+            else{
+                tail.next=newNode;
+                newNode.last=tail;
+                tail=newNode;
+            }
+        }
+        public void moveNodeToTail(DoubleNode node){
+            if(tail==node){
+                return;
+            }
+            if(head==node){
+                head=head.next;
+                head.last=null;
+            }//最近使用的节点是头结点
+            else{
+                node.last.next=node.next;
+                node.next.last=node.last;
+            }//最近使用的节点是中间节点
+            node.last=tail;
+            node.next=null;
+            tail.next=node;
+            tail=node;
+        }//将最近使用的节点移到链表的最尾端
+        public DoubleNode removeHead(){
+            if(head==null){
+                return null;
+            }
+            DoubleNode ans=head;
+            if(head==tail){
+                head=null;
+                tail=null;
+            }
+            else{
+                head=head.next;
+                head.last=null;
+                ans.next=null;
+            }
+            return ans;
+        }
+    }
+    private HashMap<Integer,DoubleNode> keyNodeMap;
+    private DoubleList nodeList;
+    private final int cap;//数组和链表都无法提前规定好大小，故采用常量接收capacity判断是否超出范围
+    public LRUCache(int capacity) {
+        keyNodeMap=new HashMap<>();
+        nodeList=new DoubleList();
+        cap=capacity;
+    }
+    
+    public int get(int key) {
+        if(keyNodeMap.containsKey(key)){
+            DoubleNode ans=keyNodeMap.get(key);
+            nodeList.moveNodeToTail(ans);
+            return ans.val;
+        }
+        return -1;
+    }
+    
+    public void put(int key, int value) {
+        if(keyNodeMap.containsKey(key)){
+            DoubleNode node=keyNodeMap.get(key);
+            node.val=value;
+            nodeList.moveNodeToTail(node);
+        }
+        else{
+            if(keyNodeMap.size()==cap){
+                keyNodeMap.remove(nodeList.removeHead().key);
+            }
+            DoubleNode newNode=new DoubleNode(key,value);
+            keyNodeMap.put(key,newNode);
+            nodeList.addNode(newNode);
+        }
+    }
+}
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache obj = new LRUCache(capacity);
+ * int param_1 = obj.get(key);
+ * obj.put(key,value);
+ */
+//整体代码是按照视频代码抄写的，再次看能读懂每一步都在干什么但是自己实际实现肯定有很多逻辑上的问题，需要使用python重新实现一遍
