@@ -1,0 +1,44 @@
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def inorderTraversal(self, root):
+        """
+        :type root: Optional[TreeNode]
+        :rtype: List[int]
+        """
+        result=[]
+        def inorder(node):
+            if node is None:
+                return
+            inorder(node.left)
+            result.append(node.val)
+            inorder(node.right)
+        inorder(root)
+        return result
+//从今天开始使用python实现为以后就业做更好的准备
+//二叉树中序遍历只需要递归左节点访问根节点递归右节点即可，但时间很长
+
+class Solution(object):
+    def inorderTraversal(self, root):
+        """
+        :type root: Optional[TreeNode]
+        :rtype: List[int]
+        """
+        result=[]
+        stack=[]//弹出栈顶元素就用pop,弹出队首元素就用popleft,本质都是列表
+        cur=root
+        while stack or cur://判断当stack或cur不为空时进入循环
+            while cur:
+                stack.append(cur)
+                cur=cur.left
+            cur=stack.pop()
+            result.append(cur.val)//题目要求返回整型列表不能只添加cur
+            cur=cur.right
+        
+        return result
+//使用迭代法代替递归可节省空间和时间，用栈可以代替递归的调用
+//将root的左节点全部放入栈中当没有左节点时弹出栈顶元素并将栈顶元素的右节点入栈
