@@ -12,7 +12,7 @@ class Solution(object):
         """
         if root is None:
             return root
-        root.left,root.right=root.right,root.left
+        root.left,root.right=root.right,root.left//python特色多重赋值
         self.invertTree(root.left)
         self.invertTree(root.right)
         return root
