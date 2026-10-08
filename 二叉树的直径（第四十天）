@@ -1,0 +1,20 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
+        ans=0
+        def depth(root):
+            nonlocal ans//python3语法特有，将外部变量作为局部变量
+            if root is None:
+                return 0
+            p=depth(root.left)
+            q=depth(root.right)
+            ans=max(p+q,ans)//比较左子树和右子树的最大深度
+            return 1+max(p,q)
+        depth(root)
+        return ans
+    //递归法分别求左子树和右子树的最大深度，然后将他们相加就是答案，需要注意的是不能只将root的左孩子和右孩子分开而是在递归过程中持续计算左右最大深度
