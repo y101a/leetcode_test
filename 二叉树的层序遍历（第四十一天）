@@ -1,0 +1,25 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+from collections import deque//必须引用队列，python无法手动实现队列
+class Solution:
+    def levelOrder(self, root: TreeNode | None) -> list[list[int]]:
+        res=[]
+        if root is None:
+            return []//题目要求返回[]不能返回none
+        queue=deque([root])//二维队列实现
+        while queue:
+            level=[]//根据题目，用来保存一层的值
+            for _ in range(len(queue))://遍历二叉树的每一层，将每一层的都添加到队列中
+                node=queue.popleft()
+                level.append(node.val)//列表添加元素使用append不是add
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+            res.append(level)
+        return res
+//求二叉树的层序遍历就是求广度优先遍历，用队列实现，如果求深度优先遍历应该用栈实现
