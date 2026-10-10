@@ -1,0 +1,22 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def sortedArrayToBST(self, nums: list[int]) -> TreeNode | None:
+        left=0
+        right=len(nums)-1//定义为整数，因为传入的是整型数组
+        def loopBST(left,right)->TreeNode:
+            if left>right:
+                return None
+            mid=(left+right)//2 //不能写/2否则mid会成为浮点数，无法进行索引，整除用//2
+            node=TreeNode(nums[mid])
+            root=node
+            node.left=loopBST(left,mid-1)
+            node.right=loopBST(mid+1,right)//注意写mid+-1
+            return root//持续二分直到只剩一个节点的时候记得返回
+        return loopBST(left,right)
+//使用递归找到平衡二叉树的左右区域，但是用时太长需要优化
+//验证回来了，不是代码用时长问题，而是网络波动导致的，可以不用优化代码了
