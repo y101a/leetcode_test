@@ -1,0 +1,17 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def isValidBST(self, root: TreeNode | None) -> bool:
+        def BST(node,low,high):
+            if node is None:
+                return True
+            if node.val<=low or node.val>=high:
+                return False
+            return BST(node.left,low,node.val) and BST(node.right,node.val,high)
+        return BST(root,float('-inf'),float('inf')) 
+//检查二叉搜索树不仅要检查根节点与左右节点的大小关系还要比较左子树的所有节点和右子树的所有节点是否全部小于或大于根节点
+//因此要进行递归比较不能只传根节点，而是整个子树的范围
