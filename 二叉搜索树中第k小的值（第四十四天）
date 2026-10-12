@@ -1,0 +1,37 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
+        res=[]
+        def mid(root):
+            if root is None:
+                return None
+            node=root
+            mid(root.left)
+            res.append(node.val)//中序遍历要在两次递归中间保存值，前序或者后序则在前和后
+            mid(root.right)
+            return root.val
+        mid(root)
+        return res[k-1]
+//因为是二叉搜索树所以中序遍历的数组就是升序的数组，因此第k个数就是要找的值
+//但是递归要完全遍历整个二叉树，因此花费的时间空间都很多，可以使用迭代法加计数器来实现
+
+class Solution:
+    def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
+       stack=[]
+       cur=root
+       temp=0
+       while stack or cur:
+        while cur:
+            stack.append(cur)
+            cur=cur.left
+        cur=stack.pop()
+        temp+=1
+        if temp==k:
+            return cur.val
+        cur=cur.right
+//迭代法进行中序遍历要不断把节点的左孩子加入栈中，如果没有就添加右孩子
