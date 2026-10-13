@@ -1,0 +1,25 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+from collections import deque//定义队列的最简单方式
+class Solution:
+    def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
+        level=[]
+        if root is None:
+            return []
+        queue=deque([root])//定义队列并添加初始元素的方法
+        while queue:
+            size=len(queue)//这里要先求出队列的长度，防止后续遍历队列一层的节点时队列发生动态变化
+            for i in range(size):
+                cur=queue.popleft()
+                if i==size-1:
+                    level.append(cur.val)
+                if cur.left:
+                    queue.append(cur.left)
+                if cur.right:
+                    queue.append(cur.right)
+//要求二叉树的右视图就是通过广度优先遍历遍历每一层的节点然后取出每一层最右边的节点
