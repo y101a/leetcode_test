@@ -1,0 +1,51 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def flatten(self, root: TreeNode | None) -> None:
+        """
+        Do not return anything, modify root in-place instead.
+        """
+        if root is None:
+            return 
+        res=[]
+        def preloop(node):
+            if node is None:
+                return
+            res.append(node)//先序遍历要在递归前进行
+            preloop(node.left)
+            preloop(node.right)
+        preloop(root)
+        for i in range(1,len(res))://遍历从1开始，因为0是root节点，root一定是链表的第一个节点，因此从数组第二个节点开始遍历即可
+            res[i-1].left=None//数组的取出还是与java没用太多不同
+            res[i-1].right=res[i]
+//先使用递归进行先序遍历得到节点数组，之后遍历列表让每个列表的节点右孩子都指向下一个节点，左孩子都指向空
+//个人感觉无论是时间还是空间都会有不少的浪费，但是执行的时间还是没想象中的慢
+
+public void flatten(TreeNode root) {
+    while (root != null) { 
+        //左子树为 null，直接考虑下一个节点
+        if (root.left == null) {
+            root = root.right;
+        } else {
+            // 找左子树最右边的节点
+            TreeNode pre = root.left;
+            while (pre.right != null) {
+                pre = pre.right;
+            } 
+            //将原来的右子树接到左子树的最右边节点
+            pre.right = root.right;
+            // 将左子树插入到右子树的地方
+            root.right = root.left;
+            root.left = null;
+            // 考虑下一个节点
+            root = root.right;
+        }
+    }
+}
+//将二叉树的整个左子树放到右子树上，将右子树放在左子树的最右边节点，继续向下遍历重复上面的方法
+//这个思路很好，即做到了在原地修改而且不需要遍历多次时间与空间都有很大节省
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
