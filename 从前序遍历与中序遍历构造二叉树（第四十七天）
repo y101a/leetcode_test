@@ -1,0 +1,25 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+class Solution:
+    def buildTree(self, preorder: list[int], inorder: list[int]) -> TreeNode | None:
+        preleft=0
+        preright=len(preorder)-1
+        inleft=0
+        inright=len(inorder)-1
+        pos={v:i for i,v in enumerate(inorder)}//定义词典，相当于哈希表将中序遍历数组的值与下标转化成键值对的形式，方便后续找到对应值的下标
+        def tree(preleft:int,preright:int,inleft:int,inright:int)->TreeNode | None://要将两个数组全部拆分，传进来数组的边界下标值，中序遍历数组的下标值可以通过根节点左右两个位置找到，而前序遍历数组的下标值可以通过长度来确定
+            if preleft>preright:
+                return None
+            root=TreeNode(preorder[preleft])
+            mid=pos[root.val]
+            root.left=tree(preleft+1,preleft+mid-inleft,inleft,mid-1)
+            root.right=tree(preleft+mid-inleft+1,preright,mid+1,inright)
+            return root//注意要返回节点否则没有结果
+        return tree(preleft,preright,inleft,inright)//直接将原始数组传入即可，不需要在传入前额外计算一次
+//先序遍历数组第一个值就是二叉树的根节点，在中序遍历数组中找到对应的位置，其左边部分就是二叉树的左子树右边部分就是二叉树的右子树，在通过递归重复拆分就能得到完整的二叉树
+//想法是自己提出来的，但是实现的代码逻辑上有很多问题，细节的处理也不到位，代码基础还是太差了
