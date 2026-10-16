@@ -1,0 +1,22 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def pathSum(self, root: Optional[TreeNode], targetSum: int) -> int:
+        map={0:1}#前缀和第一个元素是0，键表示前缀和的值，值表示路径上出现的次数
+        def dfs(node:Optional[TreeNode],cur:int)->int:
+            if node is None:
+                return 0
+            cur+=node.val#cur是当前节点的前缀和
+            count=map.get(cur-targetSum,0)#dict.get(key,default)如果cur-targetSum存在返回值，否则返回0，count用来记录满足题意的路径条数
+            map[cur]=map.get(cur,0)+1#这里加一了，因此后面要减一
+            count+=dfs(node.left,cur)
+            count+=dfs(node.right,cur)#通过递归遍历二叉树的所有节点，不需要深度优先遍历
+            map[cur]-=1
+            return count
+        return dfs(root,0)
+#这道题看后完全没有思路，不可以包括根节点和左右孩子，但可以包括根节点和左孩子以及左孩子的右孩子,因此暴力解决都很难实现
+#ai给出的思路是利用前缀和加哈希表解决，路径总和的原理和求和为k的字数组问题原理相同，但是树有结构，因此需要通过递归来遍历树的左右节点，不能将树转为数组会破坏结构
