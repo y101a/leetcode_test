@@ -1,0 +1,39 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        if p==root or q==root:
+            return root
+        parent={root:None}
+        stack=[root]#深度优先遍历
+        while stack:#采用栈结构防止递归深度超限
+            node=stack.pop()
+            for child in (node.left,node.right):
+                if child:
+                    parent[child]=node
+                    stack.append(child)
+        ancestors=set()#定义p,q元素的父节点集合，相当于hashset
+        while p:
+            ancestors.add(p)
+            p=parent[p]
+        while q not in ancestors:
+            q=parent[q]
+        return q
+#按照我的想法加ai优化实现的，先找到p,q的位置，然后遍历p的父节点，将结果放入集合中，然后再遍历q的父节点，将结果与集合中元素对比，返回第一个相同元素即可
+#二叉树没有直接找到父节点的结构，因此遍历整个二叉树，将每个节点与其对应的父节点放入哈希表中，方便后续查找
+
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        if root is None or root is p or root is q:
+            return root
+        left=self.lowestCommonAncestor(root.left,p,q)
+        right=self.lowestCommonAncestor(root.right,p,q)
+        if left and right:
+            return root
+        return left or right
+#通过递归调用返回左和右的值，然后进行比较两个都不为空，说明p,q位于两个子树中，返回root，有一个为空说明p,q在同一颗子树中返回非空节点
