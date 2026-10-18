@@ -1,0 +1,20 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def maxPathSum(self, root: TreeNode | None) -> int:
+        self.ans=float('-inf')#定义最小整数是-inf不是-int
+        def dfs(node:TreeNode | None)->int:#与Optional[TreeNode]含义相同
+            if node is None:
+                return 0
+            left=max(dfs(node.left),0)#与0比较，小于0的腿没有意义添加
+            right=max(dfs(node.right),0)
+            self.ans=max(self.ans,node.val+left+right)#ans是在遍历过程中记录的最大路径值，是全局变量因此要加self，如果通过递归函数传参可以不加
+            return node.val+max(left,right)#难点:这里返回的并不是路径的结果，对于非根节点返回的是一条腿因为题目规定不能分叉，对于根结点来说返回的是这个根节点的最大路径（并不一定就是结果最大只是函数必须返回，但值可以不取）
+        dfs(root)
+        return self.ans
+#这道题没有什么思路，通过ai提示暂时理解了正确做法，首先要将路径分为两类，一种是小山形状，包含根节点和左右孩子，一种是长条形状，从根节点开始向一边一路向下
+#通过递归就可以一次遍历所有二叉树的节点，不需要额外遍历一次，所以问题变成：对每个节点，求出“过它的最优路径和”，取全局最大。
