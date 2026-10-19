@@ -1,0 +1,21 @@
+class Solution:
+    def numIslands(self, grid: List[List[str]]) -> int:
+        m=len(grid)
+        n=len(grid[0])
+        count=0
+        for i in range(m):
+            for j in range(n):#迭代法遍历整个图结构
+                if grid[i][j]=='1':
+                    count+=1
+                    stack=[(i,j)]#栈不在外部定义目的是只记录一片相连的陆地后就释放空间
+                    grid[i][j]='0'
+                    while stack:
+                        x,y=stack.pop()
+                        for dx,dy in [(1,0),(-1,0),(0,1),(0,-1)]:#难点1：分别表示被记录的陆地上下左右分别走一步后的位置
+                            nx,ny=x+dx,y+dy
+                            if 0<=nx<m and 0<=ny<n and grid[nx][ny]=='1':#难点2：对边界的判断
+                                stack.append((nx,ny))
+                                grid[nx][ny]='0'
+        return count
+#迭代法dfs解决问题，第一次做图论题没想到可以继续使用二叉树的部分解题方法，难点是边界条件的判断和不能重复计算相连的陆地
+#遍历整个图结构，将找到陆地部分放入栈内，然后将其改为水，再去检查与其相连的的上下左右是否是陆地，如果是就加入栈内，重复检查直到整片陆地都变为水
