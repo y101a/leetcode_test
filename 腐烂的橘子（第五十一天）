@@ -1,0 +1,29 @@
+from collections import deque 
+class Solution:
+    def orangesRotting(self, grid: List[List[int]]) -> int:
+        minute=0
+        m=len(grid)
+        n=len(grid[0])
+        fresh=0#额外定义一个新鲜数用来计算是否有新鲜橘子剩余，方便返回0或-1
+        queue=deque()
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j]==2:
+                    queue.append((i,j))#这里不能定义队列否则每个烂橘子都会有一个队列发生问题
+                elif grid[i][j]==1:
+                    fresh+=1
+        if fresh==0:
+            return 0
+        while queue and fresh>0:#额外进行循环原因在下面
+            for _ in range(len(queue)):  
+                x,y=queue.popleft()
+                for dx,dy in ((1,0),(-1,0),(0,1),(0,-1)):
+                    nx,ny=x+dx,y+dy
+                    if 0<=nx<m and 0<=ny<n and grid[nx][ny]==1:
+                        grid[nx][ny]=2
+                        fresh-=1
+                        queue.append((nx,ny))
+            minute+=1
+        return minute if fresh==0 else -1
+#本题与上一道题的思路有相同之处，都是遍历整个数组找到烂橘子然后加入队列中，利用多元bfs算法计算烂橘子周围所有橘子都腐烂的时间
+#不同之处在于遍历队列中的元素不能再原来的循环内，要额外进行循环，因为所有烂橘子是同时开始传染的，因此在循环内部会多计算新鲜橘子次数发生错误
