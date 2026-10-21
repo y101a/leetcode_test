@@ -1,0 +1,26 @@
+from collections import deque,defaultdict
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: list[list[int]]) -> bool:
+        graph=defaultdict(list)#键不存在时自动创建空列表
+        indeg=[0]*numCourses#创建长度为numCourses的全0数组，记录每门课还差几门先修课
+        for a,b in prerequisites:
+            graph[b].append(a)邻接表数组的创建，第一次实现
+            indeg[a]+=1#学习a专业课之前必须先学的课程数
+        queue=deque([i for i in range(numCourses) if indeg[i]==0])#等效于下面的几部
+        finished=0#记录成功修完的课程数
+        while queue:
+            cur=queue.popleft()
+            finished+=1
+            for course in graph[cur]:#将需要提前学习这门课程的所有课程减一
+                indeg[course]-=1
+                if indeg[course]==0:
+                    queue.append(course)
+        return finished==numCourses#判断已经学完的和numcourses是否相同，不可能比numcourses大，因为课程只有0-numCourses-1
+#这道题很难很抽象，一点思路也没有(例子给的太少太相似了)，首先传入的数组不是普通图，只是两个课程之间的先后的关系，因此要先利用这个构造邻接表
+#得到邻接表后，就可以判断所有课程中最先学习的课程，加入队列中然后在弹出，将相关的邻接表数都减一，重新判断哪个可以直接学习
+
+
+queue=deque()
+for i in range(numCourses):
+  if indeg[i]==0:
+    queue.append(i)
