@@ -1,0 +1,41 @@
+class TreeNode:
+    def __init__(self):
+        self.children={}
+        self.isEnd=False#额外定义前缀树节点
+
+class Trie:
+    def __init__(self):
+        self.root=TreeNode()
+
+    def insert(self, word: str) -> None:
+        node=self.root
+        for i in word:#想要遍历单词的每个字母这样写就行
+            if i not in node.children:#判断键是否在节点中
+                node.children[i]=TreeNode()#创建新节点，并让node等于下个节点
+            node=node.children[i]
+        node.isEnd=True
+
+    def search(self, word: str) -> bool:
+        node=self.root
+        for i in word:
+            if i not in node.children:
+                return False
+            node=node.children[i]
+        return node.isEnd
+
+
+    def startsWith(self, prefix: str) -> bool:
+        node=self.root
+        for i in prefix:
+            if i not in node.children:
+                return False
+            node=node.children[i]
+        return True
+#这个问题的实现唯一的难点就在于前缀树的节点构造设计，一旦实现了哈希表与判断结束变量之后剩下的函数实现都非常简单
+
+
+# Your Trie object will be instantiated and called as such:
+# obj = Trie()
+# obj.insert(word)
+# param_2 = obj.search(word)
+# param_3 = obj.startsWith(prefix)
