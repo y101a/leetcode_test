@@ -1,0 +1,30 @@
+class Solution:
+    def permute(self, nums: list[int]) -> list[list[int]]:
+        res=[]#记录保存结果的数组
+        used=[False]*len(nums)#标记数字是否被使用的工具数组
+        def dfs(level):
+            if len(level)==len(nums):
+                res.append(level[:])#要写level[:]可以记录数组快照，否则level存的是引用
+                return #保存结束后要记得退出
+            for i in range(len(nums)):
+                if not used[i]:#不需要额外判断len(level)和len(nums)了，因为上面已经判断了
+                    level.append(nums[i])
+                    used[i]=True
+                    dfs(level)
+                    level.pop()#记得回溯，否则used无法更新
+                    used[i]=False
+        dfs([])
+        return res
+#这是第一道关于回溯的问题，解决思路是之前使用过的dfs递归，题目并不复杂但是实现起来可能会出现错误
+#对于结果数组可以用两层循环来处理，第一层是结果数组的各个位置(需要递归实现)，第二层是每个位置可以填入的数字，填入数字后要标记数字被使用防止出现重复
+
+dfs([1,2,3])
+├─ 选1 → [1]
+│   ├─ 选2 → [1,2] → 选3 → ✅ [1,2,3]
+│   └─ 选3 → [1,3] → 选2 → ✅ [1,3,2]
+├─ 选2 → [2]
+│   ├─ 选1 → [2,1] → 选3 → ✅ [2,1,3]
+│   └─ 选3 → [2,3] → 选1 → ✅ [2,3,1]
+└─ 选3 → [3]
+    ├─ 选1 → [3,1] → 选2 → ✅ [3,1,2]
+    └─ 选2 → [3,2] → 选1 → ✅ [3,2,1]
