@@ -1,0 +1,20 @@
+class Solution:
+    def combinationSum(self, candidates: list[int], target: int) -> list[list[int]]:
+        ans=[]
+        candidates=sorted(candidates)#两种排序方法都可以candidates.sort()
+        def dfs(start,res,remain):#start用来记录当前进度，避免结果重复
+            if remain==0:
+                ans.append(res[:])
+                return
+            elif remain<0:
+                return
+            for i in range(start,len(candidates)):
+                if candidates[i]>remain:#排序后剩余超过元素不需要再遍历节省时间
+                    break
+                res.append(candidates[i])
+                dfs(i,res,remain-candidates[i])#注意传入的是i而不是i+1，因为可以添加重复元素
+                res.pop()
+        dfs(0,[],target)
+        return ans
+#题目很像之前的前缀和问题，但是题目中要求可以返回重复的元素因此不需要使用前缀和解决
+#先将数组排序然后递归将每个位置加入判断是否大于target，小于继续递归而大于直接弹出，不断循环找到所有满足条件的组合
