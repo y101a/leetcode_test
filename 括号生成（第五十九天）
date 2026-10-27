@@ -1,0 +1,19 @@
+class Solution:
+    def generateParenthesis(self, n: int) -> list[str]:
+        ans=[]
+        def dfs(res,left,right):
+            if len(res)==2*n:
+                ans.append("".join(res))#以字符串形式添加
+                return
+            if left<n:
+                res.append("(")
+                dfs(res,left+1,right)
+                res.pop()#弹出尝试其他结果
+            if right<left:
+                res.append(")")
+                dfs(res,left,right+1)
+                res.pop()
+        dfs([],0,0)
+        return ans
+#代码的逻辑与之前的回溯问题没什么大的差异，需要注意的是括号的匹配问题和答案重复问题
+#本题通过递归判断左右括号的个数，先加左再加右得到结果后递归返回其他结果
