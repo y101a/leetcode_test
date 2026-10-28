@@ -1,0 +1,78 @@
+class Solution:
+    def exist(self, board: list[list[str]], word: str) -> bool:
+        m=len(board)
+        n=len(board[0])
+        str=[]
+        def dfs(row,col,str):
+            if len(str)==len(word):
+                return True
+            if len(str)>len(word):
+                return False
+            for x,y in ((1,0),(-1,0),(0,1),(0,-1)):
+                dx,dy=row+x,col+y
+                if m>dx>=0 and n>dy>=0:#注意是m>dx,n>dy，没有等于否则会越界
+                    if board[dx][dy]==word[len(str)]:
+                        ch=board[dx][dy]#额外用变量保存字母便于后续恢复
+                        str.append(ch)
+                        board[dx][dy]='#'
+                        if dfs(dx,dy,str):
+                            return True
+                        board[dx][dy]=ch
+                        str.pop()
+            return False
+        for i in range(m):
+            for j in range(n):
+                if board[i][j]==word[0]:
+                    board[i][j]='#'
+                    if dfs(i,j,[word[0]]):
+                        return True
+                    board[i][j]=word[0]#遍历图中所有word[0]的字母，将他们的位置送去递归，遍历过的改为#
+        return False
+#这道题的思路是使用递归传入对应字母行和列的值，然后检查上下左右是否有下一个对应字母，有则继续递归没有则return直到遍历图中的所有字母或者找到word
+#难点在于将遍历过的字母变为#防止重复遍历，防止数组越界
+
+from collections import Counter
+
+class Solution:
+    def exist(self, board: list[list[str]], word: str) -> bool:
+        m = len(board)
+        n = len(board[0])
+        
+        # 剪枝 1：统计字符频率
+        # 如果网格里的字符都不够拼出这个单词，直接 return False
+        board_counts = Counter(char for row in board for char in row)
+        word_counts = Counter(word)
+        for char, count in word_counts.items():
+            if board_counts[char] < count:
+                return False
+                
+        # 剪枝 2：翻转单词
+        # 如果首字母出现的次数 > 尾字母，反转单词
+        if board_counts[word[0]] > board_counts[word[-1]]:
+            word = word[::-1]
+            
+        word_finish = len(word) - 1
+
+        def dfs(i, j, k):
+            if not (0 <= i < m and 0 <= j < n) or board[i][j] != word[k]:
+                return False
+            if k == word_finish:
+                return True
+                
+            tmp = board[i][j]
+            board[i][j] = '*'
+            
+            found = (dfs(i+1, j, k+1) or dfs(i-1, j, k+1) or
+                     dfs(i, j+1, k+1) or dfs(i, j-1, k+1))
+                     
+            board[i][j] = tmp
+            return found
+
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] == word[0]:
+                    if dfs(i, j, 0):
+                        return True
+                        
+        return False
+#标准答案
