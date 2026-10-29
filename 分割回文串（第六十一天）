@@ -1,0 +1,23 @@
+class Solution:
+    def partition(self, s: str) -> list[list[str]]:
+        ans=[]
+        n=len(s)
+        dp=[[False]*n for _ in range(n)]#初始化dp数组，构造n*n的false数组
+        for i in range(n-1,-1,-1):
+            for j in range(i,n):#遍历的顺序是难点，从右下角元素开始沿着对角线向上，再遍历每一行元素
+                if s[i]==s[j] and ((j-i<3) or (dp[i+1][j-1])):#dp判断是否为回文数,要提前知道二维数组中左下角元素的值因此不能按常规遍历方法去做
+                    dp[i][j]=True
+        res=[]
+        def dfs(start):
+            if start==n:
+                ans.append(res[:])
+                return
+            for last in range(start,n):
+                if dp[start][last]:
+                    res.append(s[start:last+1])#append加入会少一位因此要写last+1,而range不会
+                    dfs(last+1)#注意传入的是last+1而不是start+1
+                    res.pop()#因为在递归中循环因此当一组res保存后，last不会从0重新开始导致结果重复
+        dfs(0)
+        return ans
+#本体采用dp动态规划判断子串是否回文，回溯递归遍历全部子串
+#难点在于子串的划分方式和回文子串的判断
