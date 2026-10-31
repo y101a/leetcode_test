@@ -1,0 +1,59 @@
+class Solution:
+    def solveNQueens(self, n: int) -> list[list[str]]:
+        ans=[]
+        res=[]
+        def ifplace(row,col):
+            for r in range(row):#遍历前面每一行的Q
+                c=res[r]#取出Q对应的列号
+                if c==col or abs(row-r)==abs(c-col):#判断是否在同一行或同一斜线
+                    return False
+            return True
+
+        def dfs(row):
+            if row==n:
+                ans.append(['.'*c + 'Q'+ '.'*(n-c-1) for c in res])#将res中存入的数字变为棋盘内容
+                return
+            for col in range(n):
+                if ifplace(row,col):
+                    res.append(col)#res中要放列因为res是按照行顺序排列的
+                    dfs(row+1)
+                    res.pop()#这里弹出res,所以不需要额外将res置空
+        dfs(0)
+        return ans
+#这道题有思路但是思路不全对而且完全不能把思路给实现出来，按照自己的思路去做会出现很多新的问题并不合适，不愧是困难题目有思路也不一定正确
+#这道题采用额外函数判断Q的位置是否合适相比于标准三数组答案时间复杂度会更高
+
+class Solution:
+    def solveNQueens(self, n: int) -> List[List[str]]:
+        # 标记是否使用
+        col_list = set()
+        diag1 = set() # ‘/’: r+c 
+        diag2 = set() # ‘\’: r-c
+        res = []
+        # path = []
+        board =[['.']*n for _ in range(n)]
+        def dfs(row):
+            if row == n:
+                # res.append(path.copy())
+                res.append(["".join(row) for row in board])
+                return
+            for col in range(n):
+                if (col not in col_list) and (row+col not in diag1) and (row-col not in diag2):
+                    # 选
+                    # s = '.'*col + 'Q' + '.'*(n-1-col)
+                    # path.append(s)
+                    board[row][col]='Q'
+                    col_list.add(col)
+                    diag1.add(row+col)
+                    diag2.add(row-col)
+                    dfs(row+1)
+
+                    # 不选
+                    # path.pop()
+                    board[row][col]='.'
+                    col_list.remove(col)
+                    diag1.remove(row+col)
+                    diag2.remove(row-col)
+        dfs(0)
+        return res
+#标准答案
