@@ -1,0 +1,28 @@
+class Solution:
+    def searchMatrix(self, matrix: list[list[int]], target: int) -> bool:
+        m=len(matrix)
+        n=len(matrix[0])
+        up,down=0,m-1
+        left,right=0,n-1
+        while up<=down:
+            mid=(up+down)//2
+            if matrix[mid][0]==target:
+                return True
+            elif matrix[mid][0]<target:
+                up=mid+1
+            else:
+                down=mid-1
+        row=up-1#循环结束后要记录所在行的值，注意二分找到的是target的下一行因此要进行-1
+        if row<0:
+            return False
+        while left<=right:
+            mid=(left+right)//2
+            if matrix[row][mid]==target:
+                return True
+            elif matrix[row][mid]<target:
+                left=mid+1
+            else:
+                right=mid-1
+        return False#判断完成后返回false,两次循环只是普通的二分查找代码
+#我的想法是先二分二维数组的第一列找的target所在行，然后再二分所在行判断target是否存在，这样的时间复杂度正好是log(m*n)
+#进行二分的时候要注意使用双变量控制上下界，不能只用单变量进行判断，两次二分分别一次循环
