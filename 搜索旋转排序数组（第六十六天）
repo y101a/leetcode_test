@@ -1,0 +1,21 @@
+class Solution:
+    def search(self, nums: list[int], target: int) -> int:
+        n=len(nums)
+        left,right=0,n-1
+        while left<=right:
+            mid=(left+right)//2
+            if nums[mid]==target:
+                return mid
+            if nums[left]<=nums[mid]:#判断左边有序
+                if nums[mid]>target>=nums[left]:#这里的判断要包括两边保证target在有序的一边
+                    right=mid-1
+                else:
+                    left=mid+1
+            elif nums[left]>nums[mid]:#判断右边有序
+                if nums[mid]<target<=nums[right]:
+                    left=mid+1
+                else:
+                    right=mid-1
+        return -1
+#这道题的关键在于二分后一定有一半是有序的，接着判断target是不是在有序的一边即可，如果不在就缩小范围重新判断，如果在题目就变为顺序数组的查找
+#能发现二分后至少有一半的数组是有序的这道题的解法就很简单了，
