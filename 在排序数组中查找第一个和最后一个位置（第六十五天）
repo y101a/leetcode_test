@@ -1,0 +1,28 @@
+class Solution:
+    def searchRange(self, nums: list[int], target: int) -> list[int]:
+        n=len(nums)
+        left,right=0,n-1
+        a=n
+        while left<=right:
+            mid=(left+right)//2
+            if nums[mid]<target:
+                left=mid+1
+            elif nums[mid]>target:
+                right=mid-1
+            else:
+                a=mid#虽然找到了target但是可能并不一定就是最左边的target因此还要继续循环
+                right=mid-1#让右边界等于mid-1检查mid左边是否还有target
+        if a==n:
+            return [-1,-1]
+        left,right=a,n-1
+        b=a
+        while left<=right:
+            mid=(left+right)//2
+            if nums[mid]>target:
+                right=mid-1
+            elif nums[mid]==target:
+                b=mid#同理注意让b等于mid而不是left,right,上面也一样
+                left=mid+1
+        return [a,b]
+#这道题根据题目要求必须将时间复杂度降到O(logn)，因此不能采用常规的遍历数组的方法，但是因为数组自带顺序因此可以通过两次二分查找定位左右边界
+#题目本身并不难，但是看错体干导致使用了O(n)时间复杂度白费力气而且对于边界条件的判断也不清晰
