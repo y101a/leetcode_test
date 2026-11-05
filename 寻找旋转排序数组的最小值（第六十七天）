@@ -1,0 +1,13 @@
+class Solution:
+    def findMin(self, nums: list[int]) -> int:
+        n=len(nums)
+        left,right=0,n-1
+        while left<right:#这里不能写等于否则会进入死循环
+            mid=(left+right)//2
+            if nums[mid]>nums[right]:#必须要right比较才能清楚分界点在左还是右
+                left=mid+1#分界点在有
+            elif nums[mid]<=nums[right]:#分界点在左
+                right=mid#这里不是mid+1否则可能将最小值排除      
+        return nums[left]
+#旋转数组找最小值还是二分找分界点然后缩小范围重复二分直到找到最小值
+#难点在于与mid比较值是right，还有循环的跳出条件
