@@ -1,0 +1,25 @@
+class Solution:
+    def findMedianSortedArrays(self, nums1: list[int], nums2: list[int]) -> float:
+        if len(nums1)>len(nums2):
+            nums1,nums2=nums2,nums1#确保nums1为最小数组
+        m,n=len(nums1),len(nums2)
+        total_left=(m+n+1)//2#保证左边元素的个数等于右边元素个数（或+1）
+        left,right=0,m#只在第一个数组二分，通过total_left就可以知道第二个数组切分位置
+        while left<=right:
+            i=(left+right)//2
+            j=total_left-i
+            left1=nums1[i-1] if i>0 else float('-inf')
+            left2=nums2[j-1] if j>0 else float('-inf')
+            right1=nums1[i] if i<m else float('inf')
+            right2=nums2[j] if j<n else float('inf')      #判断边界条件，如果没有元素了用正负无穷代替
+
+            if left1>right2:
+                right=i-1
+            elif left2>right1:
+                left=i+1#左边的最大元素要大于右边最小元素，左边最小元素要小于右边最大元素，不满足则缩小范围
+            else:
+                if (m+n)%2==1:#判断所有元素是奇数还是偶数，奇数返回中间元素，偶数返回中间两数和的平均值
+                    return max(left1,left2)
+                return (max(left1,left2)+min(right1,right2))/2
+#这道题的难度很大，按照题目的要求完全想不到，思路是将两个数组进行逻辑划分，保证左部分元素个数等于或大于一个右边元素个数
+#只在第一个数组上做二分，第二个数组按照减法确定，然后进行判断切分的两边元素大小，如果满足条件则说明切分的位置是中位数的位置，条件在上面的注解中
