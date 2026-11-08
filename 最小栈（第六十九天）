@@ -1,0 +1,29 @@
+class MinStack:
+
+    def __init__(self):
+        self.stack=[]
+        self.minstack=[]
+
+    def push(self, value: int) -> None:
+        self.stack.append(value)
+        if self.minstack:#判断加入的元素是不是最小元素，是就直接加入否则加入minstack的栈顶元素
+            i=self.minstack[-1]
+            if value<i:
+                self.minstack.append(value)
+            else:
+                self.minstack.append(i)
+        else:
+            self.minstack.append(value)
+
+    def pop(self) -> None:
+        self.stack.pop()
+        self.minstack.pop()#弹出时不需要判断弹出的是不是最小元素，因为minstack中是每时刻的最小值
+
+
+    def top(self) -> int:
+        return self.stack[-1]#只取栈顶元素可以这样写
+
+    def getMin(self) -> int:
+        return self.minstack[-1]
+#难点在于取最小元素的时间复杂度在常数级，因此只用一个栈来保存元素无法实现，需要额外的栈来保存最小元素
+#最小栈与普通栈共同添加弹出元素，但是最小栈中只添加最小元素的值而不是所有元素
