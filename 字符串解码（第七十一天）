@@ -1,0 +1,20 @@
+class Solution:
+    def decodeString(self, s: str) -> str:
+        stack=[]
+        cur=""
+        num=0
+        for i in s:
+            if '0'<=i<='9':#这里不能直接写0-300因为i是字符串只能一个一个保存，后一个数字会覆盖前一个数字
+                num=num*10+int(i)
+            elif i=='[':
+                stack.append((cur,num))#入栈的是元组，方便进行字符串复制
+                cur=""
+                num=0
+            elif i==']':
+                ch,n=stack.pop()
+                cur=ch+cur*n
+            else:
+                cur+=i
+        return cur
+#难点在于遇到数字和[]时如何进行保存。采用cur和元组入栈方式拼接字符串
+#当时想到用两个栈来进行保存和记录结果但是对于清空和转换字符串的地方无法实现，只需要一个栈即可实现
