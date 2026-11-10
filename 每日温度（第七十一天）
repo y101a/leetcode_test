@@ -1,0 +1,12 @@
+class Solution:
+    def dailyTemperatures(self, temperatures: list[int]) -> list[int]:
+        stack=[]
+        ans=[0]*len(temperatures)#定义初始化数组全0，方便后续修改数值
+        for i in range(len(temperatures)):#遍历数组下标
+            while stack and temperatures[i]>temperatures[stack[-1]]:#先判断栈顶温度与待入栈温度大小，如果待入栈温度高于栈顶温度则循环弹出栈顶元素的
+                pre=stack.pop()
+                ans[pre]=i-pre
+            stack.append(i)#否则直接入栈
+        return ans
+#这道题是经典的单调栈问题，栈内只存温度下标，让栈从底到顶按照降序排列，然后依次比较要入栈与栈顶温度的大小
+#最开始的思路是暴力解决，通过二重循环解决，但是时间复杂度是O(n^2)，采用栈解决时间复杂度是O(n)，如果看不懂解释了可以搜索题目查看讲解视频
