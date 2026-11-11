@@ -1,0 +1,14 @@
+class Solution:
+    def largestRectangleArea(self, heights: list[int]) -> int:
+        h=[0]+heights+[0]#在原数组两端加入两个哨兵，方便计算面积以及弹出栈内元素
+        stack=[]
+        maxarea=0
+        for i in range(len(h)):
+            while stack and h[stack[-1]]>h[i]:#让栈内元素保持升序
+                pre=stack.pop()
+                area=(i-stack[-1]-1)*h[pre]#这里不能只计算弹出的柱子的面积而是整体的面积
+                maxarea=max(maxarea,area)
+            stack.append(i)
+        return maxarea 
+#本体与上一题一样使用单调栈解决，但是站内顺序是升序排序，遇到更高的柱子时直接入栈遇到矮柱子时则弹出栈然后计算面积更新最大值
+#对于单调栈的考察不清晰，导致没有思路，有思路也只是暴力解决
