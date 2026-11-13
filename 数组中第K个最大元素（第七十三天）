@@ -1,0 +1,29 @@
+import random
+class Solution:
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        a=nums
+        target=len(a)-k
+        lo,hi=0,len(a)-1
+        while True:
+            r=random.randint(lo,hi)
+            a[lo],a[r]=a[r],a[lo]
+            pivot=a[lo]
+            lt,i,gt=lo,lo,hi
+            while i<=gt:
+                if a[i]<pivot:
+                    a[lt],a[i]=a[i],a[lt]
+                    lt+=1
+                    i+=1
+                elif a[i]>pivot:
+                    a[gt],a[i]=a[i],a[gt]
+                    gt-=1
+                else:
+                    i+=1
+            if lt<=target<=gt:
+                return pivot
+            elif  target<lt:
+                hi=lt-1
+            else:
+                lo=gt+1
+#在堆的考察分区中使用快速排序的方法解决，具体过程不太理解，需要找时间额外学习一下
+#对于下面的题，自己的思路越来越少了，不知道如何能提升能力
