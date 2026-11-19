@@ -1,0 +1,19 @@
+import heapq
+class Solution:
+    def topKFrequent(self, nums: list[int], k: int) -> list[int]:
+        hash={}
+        for i in nums:
+            hash[i]=hash.get(i,0)+1#i是键,hash[i]是键i对应的值
+        bucket=[[] for _ in range(len(nums)+1)]
+
+        for key,val in hash.items():
+            bucket[val].append(key)
+        
+        res=[]
+        for i in range(len(nums),0,-1):
+            res.extend(bucket[i])
+            if len(res)>=k:
+                return res[:k]
+        return res
+#这道题的思路是先遍历数组，将数组中出现的值和次数放入哈希表中，然后创建桶，按照哈希表中的键的出现频率放入对应的桶中
+#这样桶就是按照键的出现频率倒序排列的，然后倒序遍历取出前k个值
