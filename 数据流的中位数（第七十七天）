@@ -1,0 +1,20 @@
+import heapq
+class MedianFinder:
+
+    def __init__(self):
+        self.small=[]
+        self.large=[]
+
+    def addNum(self, num: int) -> None:
+        heapq.heappush(self.small,-num)#没有大根堆，因此通过负数将小根堆转为大根堆，取结果时再取反
+        heapq.heappush(self.large,-heapq.heappop(self.small))#small中存入一个值就要将堆顶元素传入large
+        if len(self.large)>len(self.small):#保证large的长度小于small
+            heapq.heappush(self.small,-heappop(self.large))
+
+    def findMedian(self) -> float:
+        if len(self.small)>len(self.large):
+            return -self.small[0]
+        else:
+            return (-self.small[0]+self.large[0])/2 
+#这道题难点在于是用什么数据结构保存存入的值，利用大根堆存放小部分的最大值，小根堆保存大部分的最小值
+#将堆顶的两个值相加可求中位数
