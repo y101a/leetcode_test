@@ -1,0 +1,12 @@
+class Solution:
+    def maxProfit(self, prices: list[int]) -> int:
+        minfx=float('inf')#最小价格
+        maxfx=0#最大利润
+        for i in prices:
+            if i <minfx:
+                minfx=i
+            else:
+                maxfx=max(maxfx,i-minfx)
+        return maxfx
+#这道题的贪心算法是最简单的一道题，不需要堆或dp等数据结构，只需要两个变量即可
+#这道题的思路是记录每天的股票价格选出最小的购买价格，再继续计算每天的最大利润，遍历完数组后就能算出最大利润
