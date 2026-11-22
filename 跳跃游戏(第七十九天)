@@ -1,0 +1,13 @@
+class Solution:
+    def canJump(self, nums: list[int]) -> bool:
+        reach=0
+        n=len(nums)
+        for i,step in enumerate(nums):#i表示数组下标，step表示对应的值
+            if i>reach:
+                return False
+            reach=max(reach,i+step)#i+step表示能从i位置到达的最远下标，与reach比较就可以判断是否可以走完
+            if reach>=n-1:
+                return True
+        return True
+#判断是否能走到数组最后一位，如果数组中没有0则一定可以到达，如果数组里有0则要判断在0处是否会停下不动
+#用reach比较能到达得最远位置，遍历数组如果算出的最远位置大于数组长度则可以实现，否则返回false
