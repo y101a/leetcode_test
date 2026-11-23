@@ -1,0 +1,16 @@
+class Solution:
+    def jump(self, nums: list[int]) -> int:
+        jump=0
+        reach=0#当前最远位置
+        far=0#下一层最远位置
+        n=len(nums)
+        for i,step in enumerate(nums[:-1]):
+            far=max(far,i+step)
+            if i==reach:
+                jump+=1
+                reach=far
+                if reach>=n-1:
+                    return jump
+        return jump
+#遍历数组计算数组每个位置能到的最大位置和下一层的最大位置，直到计算出到达数组最后位置的步数
+#这道题使用的贪心算法并不需要dp数组，如果每一个位置都计算到达数组的最大步数会花费O(n^3)
