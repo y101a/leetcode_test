@@ -1,0 +1,14 @@
+class Solution:
+    def generate(self, numRows: int) -> list[list[int]]:
+        res=[]
+        for i in range(numRows):
+            row=[]
+            for j in range(i+1):
+                if j==0 or j==i:
+                    row.append(1)
+                else:
+                    row.append(res[i-1][j-1]+res[i-1][j])#这里注意是j-1和j,因为j的左右就是j的上一层与左上一位
+            res.append(row)
+        return res
+#这道题的结果要记录每一层的数据因此要一层一层计算，对于每一层将两端的值设为一，再通过上一行的左右两值计算下一个值
+#代码仍有优化空间，但是核心逻辑不会改变，只改变常数级变量
