@@ -1,0 +1,9 @@
+class Solution:
+    def rob(self, nums: List[int]) -> int:
+        prev1,prev2=0,0
+        res=0
+        for i in nums:
+            prev2,prev1=prev1,max(prev1,prev2+i)#f[i]=f[i-1]（不偷i的最大金额）+f[i-2]+nums[i]（偷i的最大收益）
+        return prev1
+#代码非常短，遍历数组只需要计算每个位置偷与不偷的金钱就可以比较出最大的金额
+#这道题的动态规划在于用两个值分别记录前k个元素偷与不偷之间的区别，最后得到结果
